@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改文章')" />
+</head>
+<body>
+<form class="layui-form" th:object="${article}">
+    <div class="mainBox">
+        <div class="main-container">
+            <input name="articleId" th:field="*{articleId}" type="hidden">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签</label>
+        <div class="layui-input-block">
+            <input type="text" name="tag" th:field="*{tag}" placeholder="请输入标签,使用" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">主题id：</label>
+        <div class="layui-input-block">
+            <input type="text" name="topicId" th:field="*{topicId}" placeholder="请输入主题id" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">封面</label>
+        <div class="layui-input-block">
+            <input type="text" name="cover" th:field="*{cover}" placeholder="请输入封面,使用“,”拼接" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题：</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" th:field="*{title}" placeholder="请输入标题" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原始id：</label>
+        <div class="layui-input-block">
+            <input type="text" name="originalId" th:field="*{originalId}" placeholder="请输入原始id" class="layui-input"  lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原始地址：</label>
+        <div class="layui-input-block">
+            <input type="text" name="originalUrl" th:field="*{originalUrl}" placeholder="请输入原始地址" class="layui-input"  lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型：</label>
+        <div class="layui-input-block">
+            <select name="originalType"  dict-code="input" th:attr="default-value=*{originalType}" >
+                <option value="">所有</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">摘要：</label>
+        <div class="layui-input-block">
+            <textarea name="digest"  placeholder="请输入摘要" class="layui-textarea">[[*{digest}]]</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原文字内容：</label>
+        <div class="layui-input-block">
+            <input type="text" name="textContent" th:field="*{textContent}" placeholder="请输入原文字内容" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">原html内容：</label>
+        <div class="layui-input-block">
+            <input type="text" name="originalHtmlContent" th:field="*{originalHtmlContent}" placeholder="请输入原html内容" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">已处理图片的html内容：</label>
+        <div class="layui-input-block">
+            <input type="text" name="htmlContent" th:field="*{htmlContent}" placeholder="请输入已处理图片的html内容" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">未处理图片的md：</label>
+        <div class="layui-input-block">
+            <input type="text" name="originalMdConent" th:field="*{originalMdContent}" placeholder="请输入未处理图片的md" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">已处理图片的md：</label>
+        <div class="layui-input-block">
+            <input type="text" name="mdContent" th:field="*{mdContent}" placeholder="请输入已处理图片的md" class="layui-input" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">发布时间：</label>
+        <div class="col-sm-8">
+            <div class="input-group date">
+                <input type="text" name="originalDate" class="layui-input" id="originalDate" >
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者：</label>
+        <div class="layui-input-block">
+            <input type="text" name="originalAuthor" th:field="*{originalAuthor}" placeholder="请输入作者" class="layui-input" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">创建时间：</label>
+        <div class="col-sm-8">
+            <div class="input-group date">
+                <input type="text" name="createDate" class="layui-input" id="createDate" >
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="article-update">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+</body>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    layui.use(['form', 'jquery','laydate','dictionary'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let laydate = layui.laydate;
+
+        let prefix = "/spider/article/";
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        laydate.render({
+                            elem: '#originalDate'
+                        });
+                                                                                                                                                                                                                                                                                                    laydate.render({
+                            elem: '#createDate'
+                        });
+                                                        
+        form.on('submit(article-update)', function (data) {
+            for(var key in data.field){
+                var type=$(data.form).find("input[name='"+key+"']").attr("type");
+                if(type=="checkbox"){
+                    var value="";
+                    $(data.form).find("input[name='"+key+"']:checked").each(function(){
+                        value+=$(this).val()+",";
+                    })
+                    if(value!=""){
+                        value=value.substr(0,value.length-1);
+                        data.field[key]=value;
+                    }
+
+                }
+            }
+            $.ajax({
+                url: prefix+'update/info',
+                data: JSON.stringify(data.field),
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'put',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));
+                            parent.layui.table.reload("article-table");
+                        });
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000});
+                    }
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('日志监控')"/>
+    <link rel="stylesheet" href="/admin/css/other/console2.css"/>
+</head>
+<body class="pear-container">
+<div class="layui-row layui-col-space10">
+    <div class="layui-col-md12">
+        <div class="layui-row layui-col-space10">
+            <div class="layui-card-header">
+                日志信息
+            </div>
+            <div class="layui-card-body">
+                <!-- 显示区 -->
+                <div id="loggingText" contenteditable="true" class="logging-content-white"></div>
+            </div>
+            <div>
+                <!-- 操作栏 -->
+                <div style="text-align: center;">
+                    <button class="pear-btn pear-btn-primary pear-btn-sm" onclick="$('#loggingText').text('')" >清屏</button>
+                    <button class="pear-btn pear-btn-primary pear-btn-sm" onclick="$('#loggingText').animate({scrollTop:$('#loggingText')[0].scrollHeight});">滚动至底部
+                    </button>
+                    <button class="pear-btn pear-btn-primary pear-btn-sm" onclick="if(window.loggingAutoBottom){$(this).text('开启自动滚动');}else{$(this).text('关闭自动滚动');};window.loggingAutoBottom = !window.loggingAutoBottom">开启自动滚动
+                    </button>
+                    <button class="pear-btn pear-btn-primary pear-btn-sm" onclick="swtich($(this))">暗色
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    let port = [[${port}]];//端口
+
+    //websocket对象
+    let websocket = null;
+
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        //动态获取域名或ip
+        let hostname = window.location.hostname;
+        port = window.location.port;
+        websocket = new WebSocket("ws://"+hostname+":" + port + "/websocket/logging");
+    } else {
+        console.error("不支持WebSocket");
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function (e) {
+        console.error("WebSocket连接发生错误");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+        console.log("WebSocket连接成功")
+    };
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+        //追加
+        if (event.data) {
+
+            //日志内容
+            let $loggingText = $("#loggingText");
+            $loggingText.append(event.data);
+
+            //是否开启自动底部
+            if (window.loggingAutoBottom) {
+                //滚动条自动到最底部
+                $loggingText.scrollTop($loggingText[0].scrollHeight);
+            }
+        }
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        console.log("WebSocket连接关闭")
+    };
+
+    function swtich(e) {
+        if($('#loggingText').hasClass("logging-content-white")){
+            e.text('暗色');
+            $('#loggingText').attr("class","logging-content-dark");
+        } else {
+            e.text('亮色');
+            $('#loggingText').attr("class","logging-content-white");
+        }
+    }
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bs.modules.spider.mapper.TopicMapper">
+
+    <resultMap type="com.bs.modules.spider.domain.Topic" id="TopicResult">
+        <result property="topicId"    column="topic_id"    />
+        <result property="topicName"    column="topic_name"    />
+        <result property="originalUrl"    column="original_url"    />
+        <result property="originalType"    column="original_type"    />
+        <result property="size"    column="size"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTopicVo">
+        select`topic_id`,`topic_name`,`original_url`,`original_type`,`size`,`create_time`,`update_time` from `t_topic`
+    </sql>
+
+    <select id="selectTopicList" parameterType="com.bs.modules.spider.domain.Topic" resultMap="TopicResult">
+        <include refid="selectTopicVo"/>
+        <where>
+            <if test="topicName != null  and topicName != ''"> and `topic_name` like concat('%', #{topicName}, '%')</if>
+            <if test="originalUrl != null  and originalUrl != ''"> and `original_url` like concat('%', #{originalUrl}, '%')</if>
+            <if test="originalType != null "> and `original_type` = #{originalType}</if>
+        </where>
+    </select>
+
+    <select id="selectTopicById" parameterType="Long" resultMap="TopicResult">
+        <include refid="selectTopicVo"/>
+        where `topic_id` = #{topicId}
+    </select>
+
+    <insert id="insertTopic" parameterType="com.bs.modules.spider.domain.Topic">
+        insert into `t_topic`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="topicId != null">`topic_id`,</if>
+            <if test="topicName != null">`topic_name`,</if>
+            <if test="originalUrl != null">`original_url`,</if>
+            <if test="originalType != null">`original_type`,</if>
+            <if test="size != null">`size`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="topicId != null">#{topicId},</if>
+            <if test="topicName != null">#{topicName},</if>
+            <if test="originalUrl != null">#{originalUrl},</if>
+            <if test="originalType != null">#{originalType},</if>
+            <if test="size != null">`size`,</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTopic" parameterType="com.bs.modules.spider.domain.Topic">
+        update `t_topic`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="topicName != null">`topic_name` = #{topicName},</if>
+            <if test="originalUrl != null">`original_url` = #{originalUrl},</if>
+            <if test="originalType != null">`original_type` = #{originalType},</if>
+            <if test="size != null">`size`,</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+        </trim>
+        where `topic_id` = #{topicId}
+    </update>
+
+    <delete id="deleteTopicById" parameterType="Long">
+        delete from `t_topic` where `topic_id` = #{topicId}
+    </delete>
+
+    <delete id="deleteTopicByIds" parameterType="String">
+        delete from `t_topic` where `topic_id` in
+        <foreach item="topicId" collection="array" open="(" separator="," close=")">
+            #{topicId}
+        </foreach>
+    </delete>
+
+</mapper>

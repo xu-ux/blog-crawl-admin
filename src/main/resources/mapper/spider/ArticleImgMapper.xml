@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bs.modules.spider.mapper.ArticleImgMapper">
+  <resultMap id="BaseResultMap" type="com.bs.modules.spider.domain.ArticleImg">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="img_id" jdbcType="BIGINT" property="imgId" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="original_url" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="img_size" jdbcType="DOUBLE" property="imgSize" />
+    <result column="img_key" jdbcType="VARCHAR" property="imgKey" />
+    <result column="local_img_key" jdbcType="VARCHAR" property="localImgKey" />
+  </resultMap>
+</mapper>

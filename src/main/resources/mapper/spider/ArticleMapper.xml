@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bs.modules.spider.mapper.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.bs.modules.spider.domain.Article">
+    <id column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="original_id" jdbcType="VARCHAR" property="originalId" />
+    <result column="original_url" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="original_type" jdbcType="SMALLINT" property="originalType" />
+    <result column="digest" jdbcType="VARCHAR" property="digest" />
+    <result column="text_content" jdbcType="VARCHAR" property="textContent" />
+    <result column="original_html_content" jdbcType="VARCHAR" property="originalHtmlContent" />
+    <result column="html_content" jdbcType="VARCHAR" property="htmlContent" />
+    <result column="original_md_content" jdbcType="VARCHAR" property="originalMdContent" />
+    <result column="md_content" jdbcType="VARCHAR" property="mdContent" />
+    <result column="original_date_str" jdbcType="VARCHAR" property="originalDateStr" />
+    <result column="original_author" jdbcType="VARCHAR" property="originalAuthor" />
+    <result column="original_date" jdbcType="TIMESTAMP" property="originalDate"/>
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+<!--  <sql id="selectArticleVo">-->
+<!--        select`article_id`,`topic_id`,`tag`,`cover`,`title`,`original_id`,`original_url`,`original_type`,`digest`,`text_content`,`original_html_content`,`html_content`,`original_md_content`,`md_content`,`original_date_str`,`original_date`,`original_author`,`create_date` from `t_article`-->
+<!--    </sql>-->
+
+  <sql id="selectArticleVo">
+        select `article_id`,`topic_id`,`tag`,`title`,`original_id`,`original_url`,`original_type`,`digest`,`original_date_str`,`original_date`,`original_author`,`create_date` from `t_article`
+        </sql>
+
+  <select id="selectArticleList" parameterType="com.bs.modules.spider.domain.Article"
+          resultType="com.bs.modules.spider.domain.Article">
+    <include refid="selectArticleVo"/>
+    <where>
+      <if test="tag != null  and tag != ''"> and `tag` like concat('%', #{tag}, '%')</if>
+      <if test="title != null  and title != ''"> and `title` like concat('%', #{title}, '%')</if>
+      <if test="originalId != null  and originalId != ''"> and `original_id` = #{originalId}</if>
+      <if test="originalType != null "> and `original_type` = #{originalType}</if>
+      <if test="originalDate != null "> and `original_date` = #{originalDate}</if>
+    </where>
+  </select>
+
+
+  <select id="selectArticleListByTopic" parameterType="com.bs.modules.spider.domain.Article"
+          resultType="com.bs.modules.spider.domain.Article">
+    <include refid="selectArticleVo"/>
+    WHERE
+      `topic_id` = #{topicId}
+  </select>
+
+
+  <update id="updateArticle" parameterType="com.bs.modules.spider.domain.Article">
+    UPDATE `t_article`
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="topicId != null">`topic_id` = #{topicId},</if>
+      <if test="tag != null">`tag` = #{tag},</if>
+      <if test="cover != null">`cover` = #{cover},</if>
+      <if test="title != null">`title` = #{title},</if>
+      <if test="originalId != null and originalId != ''">`original_id` = #{originalId},</if>
+      <if test="originalUrl != null and originalUrl != ''">`original_url` = #{originalUrl},</if>
+      <if test="originalType != null">`original_type` = #{originalType},</if>
+      <if test="digest != null">`digest` = #{digest},</if>
+      <if test="textContent != null">`text_content` = #{textContent},</if>
+      <if test="originalHtmlContent != null">`original_html_content` = #{originalHtmlContent},</if>
+      <if test="htmlContent != null">`html_content` = #{htmlContent},</if>
+      <if test="originalMdContent != null">`original_md_content` = #{originalMdContent},</if>
+      <if test="mdContent != null">`md_content` = #{mdContent},</if>
+      <if test="originalDateStr != null">`original_date_str` = #{originalDateStr},</if>
+      <if test="originalDate != null">`original_date` = #{originalDate},</if>
+      <if test="originalAuthor != null">`original_author` = #{originalAuthor},</if>
+      <if test="createDate != null">`create_date` = #{createDate},</if>
+    </trim>
+    WHERE `article_id` = #{articleId}
+  </update>
+
+</mapper>

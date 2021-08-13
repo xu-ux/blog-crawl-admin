@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="include :: header('主题专栏列表')" />
+</head>
+<body class="pear-container">
+
+     <div id="openTopicDetailBox" style="display: none; padding: 10px;">
+    <div style="margin-bottom: 10px;">
+            <span>文章标题：</span>
+            <div class="layui-inline">
+                <input type="text" name="title" autocomplete="off" placeholder="标题" class="layui-input" style="height:32px;">
+            </div>
+    </div>
+    <table id="openTopicDetailTable" lay-filter="openTopicDetailTable"></table>
+</div>
+
+     <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId" class="layui-form">
+
+                    <div class="layui-form-item">
+                            <label class="layui-form-label">专栏名称：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="topicName" placeholder="请输入主题名称" class="layui-input" />
+                        </div>
+                                <label class="layui-form-label">地址：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="originalUrl" placeholder="请输入地址" class="layui-input" />
+                        </div>
+                       
+                        <label class="layui-form-label">来源类型：</label>
+                        <div class="layui-input-inline">
+                            <select name="originalType"   dict-code="input" >
+                                    <option value="">所有</option>
+                                    <option value="6">简书</option>
+                                    <option value="2">CSDN</option>
+                                    <option value="1">微信公众号</option>
+                                    <option value="5">掘金</option>
+                                    <option value="4">思否</option>
+                                    <option value="3">博客园</option>
+                                    <option value="8">开源中国博客</option>
+                                    <option value="9">51CTO博客</option>
+                            </select>
+                        </div>
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="topic-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+         <div class="layui-card">
+             <div class="layui-card-body">
+                 <table id="topic-table" lay-filter="topic-table"></table>
+
+                 <script type="text/html" id="topic-toolbar">
+                     <button  sec:authorize="hasPermission('/spider/topic/add','spider:topic:add')"  class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+                         <i class="layui-icon layui-icon-add-1"></i>
+                         新增
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/topic/remove','spider:topic:remove')"   class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+                         <i class="layui-icon layui-icon-delete"></i>
+                         删除
+                     </button>
+                 </script>
+
+                 <script type="text/html" id="topic-bar">
+                     <button  sec:authorize="hasPermission('/spider/topic/edit','spider:topic:edit')"   class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/topic/remove','spider:topic:remove')"   class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+                     </button>
+                     <button  class="pear-btn pear-btn-warming  pear-btn-sm" lay-event="topicDetail"><i class="layui-icon layui-icon-read"></i></button>
+                 </script>
+             </div>
+         </div>
+
+
+
+
+    <th:block th:include="include :: footer" />
+         <script>
+             layui.use(['table', 'form', 'jquery','dictionary'], function () {
+                 let table = layui.table;
+                 let form = layui.form;
+                 let $ = layui.jquery;
+
+                 let prefix = "/spider/topic/";
+
+                 let cols = [
+                     [
+                         {type: 'checkbox'},
+                         {
+                             field: 'topicId',
+                             title: '主题id'
+                         },
+                        {
+                             field: 'topicName',
+                             title: '主题名称'
+                        },
+                        {
+                             field: 'originalUrl',
+                             title: '地址'
+                        },
+                        {
+                             field: 'originalType',
+                             title: '类型'
+                        },{
+                             field: 'size',
+                             title: '数量',
+                             templet: function(d){
+                                 //得到当前行数据，并拼接成自定义模板
+                                 return `<span class="layui-badge-rim">${d.size} 篇</span>`;
+                             }
+                        },
+                         {
+                             field: 'createTime',
+                             title: '创建时间'
+                         },
+                         {
+                             field: 'updateTime',
+                             title: '修改时间'
+                         },
+                         {title: '操作', toolbar: '#topic-bar', align: 'center', width: 190}
+                     ]
+                 ]
+
+                 table.render({
+                     elem: '#topic-table',
+                     url: prefix + 'data',
+                     page: true,
+                     cols: cols,
+                     skin: 'line',
+                     toolbar: '#topic-toolbar',
+                     defaultToolbar: [{
+                         layEvent: 'refresh',
+                         icon: 'layui-icon-refresh',
+                     }, 'filter', 'print', 'exports']
+                 });
+
+                 table.on('tool(topic-table)', function (obj) {
+                     if (obj.event === 'remove') {
+                         window.remove(obj);
+                     } else if (obj.event === 'edit') {
+                         window.edit(obj);
+                     } else if (obj.event === 'topicDetail') {
+                         window.topicDetail(obj);
+                     }
+                 });
+
+                 table.on('toolbar(topic-table)', function (obj) {
+                     if (obj.event === 'add') {
+                         window.add();
+                     } else if (obj.event === 'refresh') {
+                         window.refresh();
+                     } else if (obj.event === 'batchRemove') {
+                         window.batchRemove(obj);
+                     }
+                 });
+
+                 form.on('submit(topic-query)', function (data) {
+                     table.reload('topic-table', {where: data.field})
+                     return false;
+                 });
+
+                 window.add = function () {
+                     layer.open({
+                         type: 2,
+                         title: '新增主题专栏',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'add'
+                     });
+                 }
+
+                 window.edit = function (obj) {
+                     layer.open({
+                         type: 2,
+                         title: '修改主题专栏',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'edit?topicId=' + obj.data['topicId']
+                     });
+                 }
+
+
+                 let form2 = layui.form;
+                 let table2 = layui.table;
+
+                 window.topicDetail = function (obj) {
+                     let topicId = obj.data['topicId'];
+                     layui.use(['table', 'form'], function() {
+
+                         layer.open({
+                             type: 1,
+                             title: '关联文章',
+                             area: ['750px', '700px'], //宽高
+                             content: $('#openTopicDetailBox'),
+                             end: function() {
+                                 $('#openTopicDetailBox').css("display","none");
+                             },
+                             success: function() {
+                                 table2.render({
+                                     elem: '#openTopicDetailTable',
+                                     id: 'openTopicDetailTable',
+                                     height: 520,
+                                     method: 'get', //接口http请求类型，默认：get
+                                     url: prefix + 'data/detail', //?page=1&limit=10（该参数可通过 request 自定义）
+                                     where: {
+                                         topicId: topicId,
+                                     }, //接口的其它参数
+                                     request: {
+                                         pageName: 'page', //页码的参数名称，默认：page
+                                         limitName: 'limit', //每页数据量的参数名，默认：limit
+                                     },
+                                     response: {
+                                         statusName: 'code', //规定数据状态的字段名称，默认：code
+                                         statusCode: 0, //规定成功的状态码，默认：0
+                                         msgName: 'msg', //规定状态信息的字段名称，默认：msg
+                                         countName: 'count', //规定数据总数的字段名称，默认：count
+                                         dataName: 'data', //规定数据列表的字段名称，默认：data
+                                     },
+                                     page: true, //是否分页
+                                     limit: 10, //每页显示的条数
+                                     limits: [10, 20, 30], //每页条数的选择项，默认：[10,20,30,40,50,60,70,80,90]。
+                                     cols: [
+                                         [{
+                                             field: 'originalUrl', //字段名
+                                             title: '地址', //标题
+                                             width: 100,
+                                             sort: false //是否允许排序 默认：false
+                                             //fixed: 'left' //固定列
+                                         }, {
+                                             field: 'articleId', //字段名
+                                             title: '文章id', //标题
+                                             //width: 200,
+                                             width: 80,
+                                             sort: true //是否允许排序 默认：false
+                                             //fixed: 'left' //固定列
+                                         }, {
+                                             field: 'tag', //字段名
+                                             title: '标签', //标题
+                                             width: 150,
+                                             sort: true //是否允许排序 默认：false
+                                             //fixed: 'left' //固定列
+                                         }, {
+                                             field: 'title', //字段名
+                                             title: '文章标题', //标题
+                                             width: 250,
+                                             sort: true //是否允许排序 默认：false
+                                             //fixed: 'left' //固定列
+                                         }, {
+                                             field: 'digest', //字段名
+                                             title: '状态', //标题
+                                             width: 90,
+                                             templet: function(d) {
+                                                 if (d.digest == null || d.digest == undefined) {
+                                                     return '<span class="layui-badge" style="cursor: pointer;">未激活</span>'
+                                                 } else {
+                                                     return '<span class="layui-badge layui-bg-green" style="cursor: pointer;">已激活</span>'
+                                                 }
+                                             },
+                                             sort: false //是否允许排序 默认：false
+                                             //fixed: 'left' //固定列
+                                         }]
+                                     ]
+                                 });
+                             }
+                         });
+                     });
+                 }
+
+                 window.remove = function (obj) {
+                     layer.confirm('确定要删除该主题专栏', {icon: 3, title: '提示'}, function (index) {
+                         layer.close(index);
+                         let loading = layer.load();
+                         $.ajax({
+                             url: prefix + "remove/" + obj.data['topicId'],
+                             dataType: 'json',
+                             type: 'delete',
+                             success: function (result) {
+                                 layer.close(loading);
+                                 if (result.success) {
+                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                         obj.del();
+                                     });
+                                 } else {
+                                     layer.msg(result.msg, {icon: 2, time: 1000});
+                                 }
+                             }
+                         })
+                     });
+                 }
+
+                 window.batchRemove = function (obj) {
+                     let data = table.checkStatus(obj.config.id).data;
+                     if (data.length === 0) {
+                         layer.msg("未选中数据", {icon: 3, time: 1000});
+                         return false;
+                     }
+                     let ids = "";
+                     for (let i = 0; i < data.length; i++) {
+                         ids += data[i].topicId + ",";
+                     }
+                     ids = ids.substr(0, ids.length - 1);
+                     layer.confirm('确定要删除这些主题专栏', {icon: 3, title: '提示'}, function (index) {
+                         layer.close(index);
+                         let loading = layer.load();
+                         $.ajax({
+                             url: prefix + "batchRemove",
+                             dataType: 'json',
+                             data: {"ids":ids},
+                             type: 'delete',
+                             success: function (result) {
+                                 layer.close(loading);
+                                 if (result.success) {
+                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                         table.reload('topic-table');
+                                     });
+                                 } else {
+                                     layer.msg(result.msg, {icon: 2, time: 1000});
+                                 }
+                             }
+                         })
+                     });
+                 }
+
+                 window.refresh = function (param) {
+                     table.reload('topic-table', {where: param});
+                 }
+             })
+         </script>
+</body>
+
+</html>

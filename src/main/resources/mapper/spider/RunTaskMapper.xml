@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bs.modules.spider.mapper.RunTaskMapper">
+  <resultMap id="BaseResultMap" type="com.bs.modules.spider.domain.RunTask">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="original_url" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="original_type" jdbcType="SMALLINT" property="originalType" />
+    <result column="run_status" jdbcType="SMALLINT" property="runStatus" />
+    <result column="error_msg" jdbcType="VARCHAR" property="errorMsg" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+
+  <resultMap type="com.bs.modules.spider.domain.RunTask" id="RunTaskResult">
+    <result property="id"    column="id"    />
+    <result property="originalUrl"    column="original_url"    />
+    <result property="originalType"    column="original_type"    />
+    <result property="runStatus"    column="run_status"    />
+    <result property="errorMsg"    column="error_msg"    />
+    <result property="userId"    column="user_id"    />
+    <result property="createTime"    column="create_time"    />
+    <result property="updateTime"    column="update_time"    />
+  </resultMap>
+
+  <sql id="selectRunTaskVo">
+        select`id`,`original_url`,`original_type`,`run_status`,`error_msg`,`user_id`,`create_time`,`update_time` from `t_run_task`
+    </sql>
+
+  <select id="selectRunTaskList" parameterType="com.bs.modules.spider.domain.RunTask" resultMap="RunTaskResult">
+    <include refid="selectRunTaskVo"/>
+    <where>
+      <if test="originalUrl != null  and originalUrl != ''"> and `original_url` like concat('%', #{originalUrl}, '%')</if>
+      <if test="originalType != null "> and `original_type` = #{originalType}</if>
+      <if test="runStatus != null "> and `run_status` = #{runStatus}</if>
+    </where>
+    ORDER BY `create_time` DESC
+  </select>
+
+  <select id="selectRunTaskById" parameterType="Long" resultMap="RunTaskResult">
+    <include refid="selectRunTaskVo"/>
+    where `id` = #{id}
+  </select>
+
+  <insert id="insertRunTask" parameterType="com.bs.modules.spider.domain.RunTask" useGeneratedKeys="true" keyProperty="id">
+    insert into `t_run_task`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="originalUrl != null">`original_url`,</if>
+      <if test="originalType != null">`original_type`,</if>
+      <if test="runStatus != null">`run_status`,</if>
+      <if test="errorMsg != null">`error_msg`,</if>
+      <if test="userId != null">`user_id`,</if>
+      <if test="createTime != null">`create_time`,</if>
+      <if test="updateTime != null">`update_time`,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="originalUrl != null">#{originalUrl},</if>
+      <if test="originalType != null">#{originalType},</if>
+      <if test="runStatus != null">#{runStatus},</if>
+      <if test="errorMsg != null">#{errorMsg},</if>
+      <if test="userId != null">#{userId},</if>
+      <if test="createTime != null">#{createTime},</if>
+      <if test="updateTime != null">#{updateTime},</if>
+    </trim>
+  </insert>
+
+  <update id="updateRunTask" parameterType="com.bs.modules.spider.domain.RunTask">
+    update `t_run_task`
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="originalUrl != null">`original_url` = #{originalUrl},</if>
+      <if test="originalType != null">`original_type` = #{originalType},</if>
+      <if test="runStatus != null">`run_status` = #{runStatus},</if>
+      <if test="errorMsg != null">`error_msg` = #{errorMsg},</if>
+      <if test="userId != null">`user_id` = #{userId},</if>
+      <if test="createTime != null">`create_time` = #{createTime},</if>
+      <if test="updateTime != null">`update_time` = #{updateTime},</if>
+    </trim>
+    where `id` = #{id}
+  </update>
+
+  <delete id="deleteRunTaskById" parameterType="Long">
+        delete from `t_run_task` where `id` = #{id}
+    </delete>
+
+  <delete id="deleteRunTaskByIds" parameterType="String">
+    delete from `t_run_task` where `id` in
+    <foreach item="id" collection="array" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+
+</mapper>

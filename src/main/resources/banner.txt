@@ -1,0 +1,12 @@
+${AnsiColor.BRIGHT_RED}
+
+      ██████╗██████╗  █████╗ ██╗    ██╗██╗
+     ██╔════╝██╔══██╗██╔══██╗██║    ██║██║
+     ██║     ██████╔╝███████║██║ █╗ ██║██║
+     ██║     ██╔══██╗██╔══██║██║███╗██║██║
+     ╚██████╗██║  ██║██║  ██║╚███╔███╔╝███████╗
+      ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚══════╝ 1.0.0
+
+${AnsiColor.BRIGHT_YELLOW}SpringBoot Version:${spring-boot.version}
+${AnsiColor.BRIGHT_YELLOW}Powered By: https://github.com/xu-ux
+${AnsiColor.DEFAULT}

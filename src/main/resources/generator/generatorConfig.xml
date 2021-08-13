@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--引入配置文件-->
+    <properties resource="generator/generator.properties"/>
+    <!--这个是数据库的驱动包的完成路径oracle就是oracle的驱动包，反之，就用mysql的驱动包 -->
+    <classPathEntry location="${jdbc.driverClassLocation}"/>
+    <!-- 这个地方使用MyBatis3，如果使用 MyBatis3Simple不生成XXXBySample-->
+    <context id="mysql" targetRuntime="MyBatis3Simple">
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="useMapperCommentGenerator" value="true"/>
+        <!-- 通用mapper插件 -->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <!-- 此处的 MyMapper注意一定不能被扫描到-->
+            <property name="mappers" value="${generator.mappers}"/>
+            <!-- caseSensitive 是否区分大小写，默认值 false。如果数据库区分大小写，这里就需要配置为 true，这样当表名为 USER 时，
+             会生成 @Table(name = "USER") 注解，否则使用小写 user 时会找不到表。-->
+            <property name="caseSensitive" value="true"/>
+            <!--forceAnnotation 是否强制生成注解，默认 false，如果设置为 true，不管数据库名和字段名是否一致，都会生成注解（包含 @Table 和 @Column）。-->
+            <property name="forceAnnotation" value="true"/>
+        </plugin>
+        <commentGenerator>
+            <property name="suppressDate" value="true"/><!-- 是否生成注释代时间戳-->
+            <property name="suppressAllComments" value="false"/><!-- 是否取消注释 -->
+        </commentGenerator>
+        <jdbcConnection
+                driverClass="${jdbc.driverClass}"
+                connectionURL="${jdbc.connectionURL}"
+                userId="${jdbc.username}"
+                password="${jdbc.password}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!--域模型层,生成的目标包,项目目标源文件 -->
+        <javaModelGenerator targetPackage="${generator.javaModel-targetPackage}" targetProject="${generator.targetProject}">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="false" />
+        </javaModelGenerator>
+        <!--XML映射文件,生成的位置（目标包）,源代码文件夹 -->
+        <sqlMapGenerator targetPackage="${generator.sqlMap-targetPackage}" targetProject="${generator.sqlMap-targetProject}">
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+        <!--XML对应的Mapper类 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="${generator.javaClient-targetPackage}" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!--下面是数据库表名和项目中需要生成类的名称，建议和数据库保持一致，如果有多个表，添加多个节点即可 -->
+        <!-- database数据库 -->
+<!--        <table tableName="t_article_img" domainObjectName="ArticleImg">-->
+<!--            <generatedKey column="id" sqlStatement="Mysql" identity="false"/>-->
+<!--        </table>-->
+
+<!--        <table tableName="t_run_task" domainObjectName="RunTask">-->
+<!--            <generatedKey column="id" sqlStatement="Mysql" identity="false"/>-->
+<!--        </table>-->
+        <!--        t_history_task -->
+        <table tableName="t_history_task" domainObjectName="HistoryTask">
+            <generatedKey column="id" sqlStatement="Mysql" identity="false"/>
+        </table>
+        <table tableName="t_link_task" domainObjectName="LinkTask">
+            <generatedKey column="id" sqlStatement="Mysql" identity="false"/>
+        </table>
+<!--        t_unique t_link_task-->
+        <table tableName="t_unique" domainObjectName="Unique">
+            <generatedKey column="id" sqlStatement="Mysql" identity="false"/>
+        </table>
+
+    </context>
+</generatorConfiguration>

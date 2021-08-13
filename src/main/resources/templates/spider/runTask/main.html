@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="include :: header('爬虫任务运行列表')" />
+</head>
+<body class="pear-container">
+     <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId" class="layui-form">
+
+                    <div class="layui-form-item">
+                            <label class="layui-form-label">原始地址：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="originalUrl" placeholder="请输入原始地址" class="layui-input" />
+                        </div>
+                       
+                        <label class="layui-form-label">来源类型：</label>
+                        <div class="layui-input-inline">
+                            <select name="originalType"   dict-code="input" >
+                                <option value="">所有</option>
+                                <option value="6">简书</option>
+                                <option value="2">CSDN</option>
+                                <option value="1">微信公众号</option>
+                                <option value="5">掘金</option>
+                                <option value="4">思否</option>
+                                <option value="3">博客园</option>
+                                <option value="8">开源中国博客</option>
+                                <option value="9">51CTO博客</option>
+
+                            </select>
+                        </div>
+                   
+                        <label class="layui-form-label">运行状态：</label>
+                        <div class="layui-input-inline">
+                            <select name="runStatus"   dict-code="input" >
+                                <option value="">所有</option>
+                                <option value="0">停止</option>
+                                <option value="1">进行中</option>
+                                <option value="2">异常</option>
+                                <option value="3">完成</option>
+                            </select>
+                        </div>
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="runTask-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+         <div class="layui-card">
+             <div class="layui-card-body">
+                 <table id="runTask-table" lay-filter="runTask-table"></table>
+
+                 <script type="text/html" id="runTask-toolbar">
+                     <button  sec:authorize="hasPermission('/spider/runTask/add','spider:runTask:add')"  class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+                         <i class="layui-icon layui-icon-add-1"></i>
+                         新增
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/runTask/remove','spider:runTask:remove')"   class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+                         <i class="layui-icon layui-icon-delete"></i>
+                         删除
+                     </button>
+                 </script>
+
+                 <script type="text/html" id="runTask-bar">
+                     <button  sec:authorize="hasPermission('/spider/runTask/edit','spider:runTask:edit')"   class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/runTask/remove','spider:runTask:remove')"   class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+                     </button>
+                 </script>
+             </div>
+         </div>
+    <th:block th:include="include :: footer" />
+         <script>
+             layui.use(['table', 'form', 'jquery','dictionary'], function () {
+                 let table = layui.table;
+                 let form = layui.form;
+                 let $ = layui.jquery;
+
+                 let prefix = "/spider/runTask/";
+
+                 let cols = [
+                     [
+                         {type: 'checkbox'},
+                         {
+                             field: 'id',
+                             title: '任务id'
+                         },
+                        {
+                             field: 'originalUrl',
+                             title: '原始地址'
+                        },
+                        {
+                             field: 'originalType',
+                             title: '来源类型'
+                        },
+                        {
+                             field: 'runStatus',
+                             title: '运行状态'
+                        },
+                        {
+                             field: 'errorMsg',
+                             title: '错误信息'
+                        },
+                        {
+                             field: 'userId',
+                             title: '提交用户'
+                        },
+                         {
+                             field: 'createTime',
+                             title: '创建时间',
+                             sore: true
+                         },
+                         {
+                             field: 'updateTime',
+                             title: '修改时间'
+                         },
+                         {title: '操作', toolbar: '#runTask-bar', align: 'center', width: 130}
+                     ]
+                 ]
+
+                 table.render({
+                     elem: '#runTask-table',
+                     url: prefix + 'data',
+                     page: true,
+                     cols: cols,
+                     skin: 'line',
+                     toolbar: '#runTask-toolbar',
+                     defaultToolbar: [{
+                         layEvent: 'refresh',
+                         icon: 'layui-icon-refresh',
+                     }, 'filter', 'print', 'exports']
+                 });
+
+                 table.on('tool(runTask-table)', function (obj) {
+                     if (obj.event === 'remove') {
+                         window.remove(obj);
+                     } else if (obj.event === 'edit') {
+                         window.edit(obj);
+                     }
+                 });
+
+                 table.on('toolbar(runTask-table)', function (obj) {
+                     if (obj.event === 'add') {
+                         window.add();
+                     } else if (obj.event === 'refresh') {
+                         window.refresh();
+                     } else if (obj.event === 'batchRemove') {
+                         window.batchRemove(obj);
+                     }
+                 });
+
+                 form.on('submit(runTask-query)', function (data) {
+                     table.reload('runTask-table', {where: data.field})
+                     return false;
+                 });
+
+                 window.add = function () {
+                     layer.open({
+                         type: 2,
+                         title: '新增任务',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'add'
+                     });
+                 }
+
+                 window.edit = function (obj) {
+                     layer.open({
+                         type: 2,
+                         title: '修改任务',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'edit?id=' + obj.data['id']
+                     });
+                 }
+
+                 window.remove = function (obj) {
+                     layer.confirm('确定要删除该务', {icon: 3, title: '提示'}, function (index) {
+                         layer.close(index);
+                         let loading = layer.load();
+                         $.ajax({
+                             url: prefix + "remove/" + obj.data['id'],
+                             dataType: 'json',
+                             type: 'delete',
+                             success: function (result) {
+                                 layer.close(loading);
+                                 if (result.success) {
+                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                         obj.del();
+                                     });
+                                 } else {
+                                     layer.msg(result.msg, {icon: 2, time: 1000});
+                                 }
+                             }
+                         })
+                     });
+                 }
+
+                 window.batchRemove = function (obj) {
+                     let data = table.checkStatus(obj.config.id).data;
+                     if (data.length === 0) {
+                         layer.msg("未选中数据", {icon: 3, time: 1000});
+                         return false;
+                     }
+                     let ids = "";
+                     for (let i = 0; i < data.length; i++) {
+                         ids += data[i].id + ",";
+                     }
+                     ids = ids.substr(0, ids.length - 1);
+                     layer.confirm('确定要删除这些任务', {icon: 3, title: '提示'}, function (index) {
+                         layer.close(index);
+                         let loading = layer.load();
+                         $.ajax({
+                             url: prefix + "batchRemove",
+                             dataType: 'json',
+                             data: {"ids":ids},
+                             type: 'delete',
+                             success: function (result) {
+                                 layer.close(loading);
+                                 if (result.success) {
+                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                         table.reload('runTask-table');
+                                     });
+                                 } else {
+                                     layer.msg(result.msg, {icon: 2, time: 1000});
+                                 }
+                             }
+                         })
+                     });
+                 }
+
+                 window.refresh = function (param) {
+                     table.reload('runTask-table', {where: param});
+                 }
+             })
+         </script>
+</body>
+</html>

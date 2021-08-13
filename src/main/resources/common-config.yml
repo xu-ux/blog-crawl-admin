@@ -1,0 +1,20 @@
+# Static静态读取公共配置
+
+########### oss配置
+aliyunOss:
+  endpoint: oss-cn-shenzhen.aliyuncs.com
+  publicEndpoint: oss-cn-shenzhen.aliyuncs.com
+  internalEndpoint: oss-cn-shenzhen-internal.aliyuncs.com
+  callbackUrl:
+  publicBucketName: x***v
+  accessKeyId: L********************x
+  accessKeySecret: e********************u
+
+########### 文章图片路径
+filePath:
+  imgPath: bca/uploadImg/
+
+
+########### 系统开关
+appSwitch:
+  uploadOss: false # 是否将图片上传给阿里云

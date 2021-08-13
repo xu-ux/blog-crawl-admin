@@ -1,0 +1,85 @@
+# Tomcat
+server:
+  # 端 口
+  port: 8080
+  # Servlet
+  servlet:
+    # Session
+    session:
+      # 超 时 时 间
+      timeout: 120m
+spring:
+  redis:
+    # 主 机 地 址
+    host: 192.168.122.22
+    # 端 口
+    port: 6379
+    # 认 证
+    password:
+    # 选 择 数 据 库
+    database: 0
+    # 连 接 池 配 置
+    lettuce:
+      pool:
+        # 连接池中的最大空闲连接
+        max-active: 20
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 4
+        # 连接池中的最小空闲连接
+        min-idle: 0
+    # 超时时间
+    timeout: 1000
+  # 简单分片（不分库）
+  shardingsphere:
+    datasource:
+      names: ds0
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.122.22:3306/blog-crawl?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+        username: root
+        password: 123456
+        # 初始连接数
+        initialSize: 5
+        # 最小连接池数量
+        minIdle: 10
+        # 最大连接池数量
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 配置一个连接在池中最大生存的时间，单位是毫秒
+        maxEvictableIdleTimeMillis: 900000
+        # 配置检测连接是否有效
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        filters: stat,wall
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        # 合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+    sharding:
+      tables:
+        t_article:
+          actual-data-nodes: ds0.t_article_$->{0..9}
+          table-strategy:
+            inline:
+              sharding-column: article_id
+              algorithm-expression: t_article_$->{article_id % 10}
+        t_article_img:
+          actual-data-nodes: ds0.t_article_img_$->{0..9}
+          table-strategy:
+            inline:
+              sharding-column: article_id
+              algorithm-expression: t_article_img_$->{article_id % 10}
+      defaultDataSourceName: ds0
+      binding-tables: t_article,t_article_img
+    props:
+      sql.show: false
+

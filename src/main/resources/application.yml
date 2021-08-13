@@ -1,0 +1,109 @@
+# Spring 配置
+spring:
+  session:
+    timeout: 120m
+  # Druid Pool 运行环境
+  profiles:
+    # 运 行 环 境
+    active: dev
+# 内部tomcat目录
+server:
+  tomcat:
+    basedir: tomcat/
+# Mybatis 配 置
+mybatis:
+  configuration:
+    cache-enabled: true
+    # 下划线转驼峰
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+  # 配 置 扫 描
+  mapper-locations: classpath*:mapper/*/*.xml
+  # 别 名 扫 描
+  type-aliases-package: com.bs
+
+# 插 件 配 置 信 息
+pear:
+  # Document 配 置 信 息
+  swagger:
+    # 文 档 标 题
+    title: BlogCrawl Admin
+    # 是 否 开 启
+    enable: true
+    # 描 述 信 息
+    describe: 爬虫管理开发平台
+    # 扫 包 路 径
+    scan-package: com.bs
+    # 协 议
+    licence: GNU Affero General Public License v3.0
+    # 协 议 地 址
+    licence-url: https://github.com/xu-ux/blog-crawl-admin/blob/main/LICENSE
+    # 组 织 信 息
+    terms-of-service-url: https://github.com/xu-ux/blog-crawl-admin
+    # 版 本 信 息
+    version: Release 1.0.0
+    # 扩 展 信 息
+    contact:
+      # 作 者
+      name: test-admin
+      # 连 接
+      url: https://github.com/xu-ux/blog-crawl-admin
+      # 邮 箱
+      email:
+  # 权 限 配 置
+  security:
+    # 开 启 超 级 管 理 员 账 号 -- 不需要验证权限
+    super-auth-open: true
+    # 超 级 管 理 员 账 号 -- 不需要验证权限
+    super-admin: admin
+    # 允 许 同 一 账 号 多 端 登 录 个 数
+    maximum: 1
+    # 记 住 密 码 KEY
+    remember-key: PEAR_REMEMBER
+    # 不 需 要 权 限 拦 截 的 接 口 配 置
+    open-api:
+      - /login/**  # 开放登录接口
+      - /system/captcha/** # 开放验证码接口
+      - /assets/** # 开放静态资源
+      - /admin/** # 开放静态资源
+      - /component/** # 开放静态资源
+      - /favicon.ico # 开放FAVICON
+      - /articleFile/** # 开放静态资源
+
+# 上传配置
+blogsearch:
+  upload:
+    # windows 上传路径
+    windows-path: D:\home\uploads\
+    # linux 上传路径
+    linux-path: /home/uploads/
+    # 是否使用ftp服务器
+    ftp-use: false
+    #  ftp服务器地址
+    hostname:
+    # ftp服务器端口
+    port: 0000
+    # ftp服务器用户名
+    username:
+    # ftp服务器密码
+    password:
+  local:
+    md-file-path: articleFile/
+    tag-file-path: articleFile/tagFile/
+    basedir: tomcat/
+    driverWin: driver/chromedriver91.0.4472.19.exe
+    driverLinux: driver/chromedriver91.0.4472.19
+
+# Page Helper 分页配置
+pagehelper:
+  # 方 言
+  helper-dialect: mysql
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
+
+logging:
+  config: classpath:logback-spring.xml
+
+
+

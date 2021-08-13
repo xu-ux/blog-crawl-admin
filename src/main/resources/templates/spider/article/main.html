@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="include :: header('文章列表')" />
+</head>
+<body class="pear-container">
+     <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId" class="layui-form">
+
+                    <div class="layui-form-item">
+                            <label class="layui-form-label">标题：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="title" placeholder="请输入标题" class="layui-input" />
+                        </div>
+                        <label class="layui-form-label">标签：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="tag" placeholder="请输入标签" class="layui-input" />
+                        </div>
+                                <label class="layui-form-label">原始id：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="originalId" placeholder="请输入原始id" class="layui-input"  lay-required/>
+                        </div>
+                       
+                        <label class="layui-form-label">类型：</label>
+                        <div class="layui-input-inline">
+                            <select name="originalType"   dict-code="input" >
+                                <option value="">所有</option>
+                                <option value="6">简书</option>
+                                <option value="2">CSDN</option>
+                                <option value="1">微信公众号</option>
+                                <option value="5">掘金</option>
+                                <option value="4">思否</option>
+                                <option value="3">博客园</option>
+                                <option value="8">开源中国博客</option>
+                                <option value="9">51CTO博客</option>
+                                <option value="13">InfoQ</option>
+                            </select>
+                        </div>
+                        <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="article-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+         <div class="layui-card">
+             <div class="layui-card-body">
+                 <table id="article-table" lay-filter="article-table"></table>
+
+                 <script type="text/html" id="article-toolbar">
+                     <button  sec:authorize="hasPermission('/spider/article/add','spider:article:add')"  class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+                         <i class="layui-icon layui-icon-add-1"></i>
+                         新增
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/article/add','spider:article:add')"  class="pear-btn pear-btn-primary pear-btn-md" lay-event="addCategory">
+                         <i class="layui-icon layui-icon-add-1"></i>
+                         分类新增
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/article/remove','spider:article:remove')"   class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+                         <i class="layui-icon layui-icon-delete"></i>
+                         删除
+                     </button>
+                 </script>
+
+                 <script type="text/html" id="article-bar">
+                     <button  sec:authorize="hasPermission('/spider/article/edit','spider:article:edit')"   class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+                     </button>
+                     <button  sec:authorize="hasPermission('/spider/article/remove','spider:article:remove')"   class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+                     </button>
+                     <button  class="pear-btn pear-btn-warming  pear-btn-sm" lay-event="preview"><i class="layui-icon layui-icon-read"></i></button>
+                 </script>
+             </div>
+         </div>
+    <th:block th:include="include :: footer" />
+         <script>
+             /**
+              * https://www.layui.com/doc/modules/table.html#cols
+              */
+
+             layui.use(['table', 'form', 'jquery','dictionary'], function () {
+                 let table = layui.table;
+                 let form = layui.form;
+                 let $ = layui.jquery;
+
+                 let prefix = "/spider/article/";
+
+                 let cols = [
+                     [
+                         {type: 'checkbox'},
+                         {
+                             field: 'articleId',
+                             title: '编号'
+                         },
+                        {
+                             field: 'tag',
+                             title: '标签'
+                        },
+                        {
+                             field: 'title',
+                             title: '标题',
+                             width:300
+                        },
+                        {
+                             field: 'originalId',
+                             title: '原始id',
+                             hide:true
+                        },
+                        {
+                             field: 'originalUrl',
+                             title: '原始地址'
+                        },
+                        {
+                             field: 'originalType',
+                             title: '类型',
+                             width:90
+                        },
+                        {
+                             field: 'digest',
+                             title: '摘要'
+                        },
+                        {
+                             field: 'originalHtmlContent',
+                             title: '原始html内容',
+                             hide:true
+                        },
+                        {
+                             field: 'htmlContent',
+                             title: 'html内容',
+                             hide:true
+                        },
+                        {
+                             field: 'originalMdContent',
+                             title: '原始MD文档',
+                             hide:true
+                        },
+                        {
+                             field: 'mdContent',
+                             title: 'MD文档',
+                             hide:true
+                        },
+                        {
+                             field: 'originalDate',
+                             title: '发布时间',
+                             sort: true
+                        },
+                        {
+                             field: 'originalAuthor',
+                             title: '作者'
+                        },
+                         {title: '操作', toolbar: '#article-bar', align: 'center', width: 190}
+                     ]
+                 ]
+
+                 table.render({
+                     elem: '#article-table',
+                     url: prefix + 'data',
+                     page: true,
+                     cols: cols,
+                     skin: 'line',
+                     toolbar: '#article-toolbar',
+                     defaultToolbar: [{
+                         layEvent: 'refresh',
+                         icon: 'layui-icon-refresh',
+                     }, 'filter', 'print', 'exports']
+                 });
+
+                 table.on('tool(article-table)', function (obj) {
+                     if (obj.event === 'remove') {
+                         window.remove(obj);
+                     } else if (obj.event === 'edit') {
+                         window.edit(obj);
+                     } else if (obj.event == 'preview') {
+                         window.preview(obj);
+                     }
+                 });
+
+                 table.on('toolbar(article-table)', function (obj) {
+                     if (obj.event === 'add') {
+                         window.add();
+                     } else if (obj.event === 'refresh') {
+                         window.refresh();
+                     } else if (obj.event === 'batchRemove') {
+                         window.batchRemove(obj);
+                     } else if (obj.event === 'addCategory'){
+                         window.addCategory(obj);
+                     }
+                 });
+
+                 form.on('submit(article-query)', function (data) {
+                     table.reload('article-table', {where: data.field})
+                     return false;
+                 });
+
+                 window.add = function () {
+                     layer.open({
+                         type: 2,
+                         title: '新增文章',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'add'
+                     });
+                 }
+
+                 window.edit = function (obj) {
+                     layer.open({
+                         type: 2,
+                         title: '修改文章',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'edit?articleId=' + obj.data['articleId']
+                     });
+                 }
+
+                 window.addCategory = function () {
+                     layer.open({
+                         type: 2,
+                         title: '新增爬取分类页',
+                         shade: 0.1,
+                         area: ['550px', '500px'],
+                         content: prefix + 'addCategory'
+                     });
+                 }
+
+                 // https://www.layui.com/doc/modules/layer.html
+                 window.preview = function (obj) {
+                     var w = ($(window).width() - 50);
+                     var h = ($(window).height() - 50);
+
+                     layer.open({
+                         resize: false,
+                         title: '预览',
+                         shadeClose: true,
+                         area: [w + 'px', h + 'px'],
+                         type: 2,
+                         content: prefix + 'preview?articleId=' + obj.data['articleId']
+                     })
+                     // location.href = `/spider/article/preview?articleId=${obj.data['articleId']}`;
+                 }
+
+                 window.remove = function (obj) {
+                     layer.confirm('确定要删除该文章', {icon: 3, title: '提示'}, function (index) {
+                         layer.close(index);
+                         let loading = layer.load();
+                         $.ajax({
+                             url: prefix + "remove/" + obj.data['articleId'],
+                             dataType: 'json',
+                             type: 'delete',
+                             success: function (result) {
+                                 layer.close(loading);
+                                 if (result.success) {
+                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                         obj.del();
+                                     });
+                                 } else {
+                                     layer.msg(result.msg, {icon: 2, time: 1000});
+                                 }
+                             }
+                         })
+                     });
+                 }
+
+                 window.batchRemove = function (obj) {
+                     let data = table.checkStatus(obj.config.id).data;
+                     if (data.length === 0) {
+                         layer.msg("未选中数据", {icon: 3, time: 1000});
+                         return false;
+                     }
+                     let ids = "";
+                     for (let i = 0; i < data.length; i++) {
+                         ids += data[i].articleId + ",";
+                     }
+                     ids = ids.substr(0, ids.length - 1);
+                     layer.confirm('确定要删除这些文章', {icon: 3, title: '提示'}, function (index) {
+                         layer.close(index);
+                         let loading = layer.load();
+                         $.ajax({
+                             url: prefix + "batchRemove",
+                             dataType: 'json',
+                             data: {"ids":ids},
+                             type: 'delete',
+                             success: function (result) {
+                                 layer.close(loading);
+                                 if (result.success) {
+                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                         table.reload('article-table');
+                                     });
+                                 } else {
+                                     layer.msg(result.msg, {icon: 2, time: 1000});
+                                 }
+                             }
+                         })
+                     });
+                 }
+
+                 window.refresh = function (param) {
+                     table.reload('article-table', {where: param});
+                 }
+             })
+         </script>
+</body>
+</html>

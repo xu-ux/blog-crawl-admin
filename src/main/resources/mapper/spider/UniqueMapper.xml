@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bs.modules.spider.mapper.UniqueMapper">
+  <resultMap id="BaseResultMap" type="com.bs.modules.spider.domain.Unique">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="original_id" jdbcType="VARCHAR" property="originalId" />
+    <result column="original_url" jdbcType="VARCHAR" property="originalUrl" />
+    <result column="original_type" jdbcType="SMALLINT" property="originalType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+</mapper>

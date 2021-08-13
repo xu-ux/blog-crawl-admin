@@ -4,7 +4,7 @@
 
 
 
-`BlogCrawlAdmin`（博客爬虫管理） 是一个后台爬虫管理项目，基于[Pear-Admin](https://gitee.com/pear-admin/Pear-Admin-Layui)框架开发。主要用于爬取某渠道文章，并统一解析成MD，管理爬取的文章；本项目不包含分布式采集、重爬、代理、多线程等逻辑，需要者自行开发。
+`BlogCrawlAdmin`（博客爬虫管理） 是一个后台爬取文章管理项目😜，基于[Pear-Admin](https://gitee.com/pear-admin/Pear-Admin-Layui)框架开发。主要用于爬取某渠道文章，并统一解析成MD，管理爬取的文章；本项目不包含分布式采集、重爬、代理、多线程等逻辑，需要者自行开发。
 
 本项目仅供学习使用，禁止用于任何非法用途！
 

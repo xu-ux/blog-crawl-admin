@@ -7,6 +7,7 @@ import com.bs.modules.spider.domain.ArticleImg;
 import com.bs.modules.spider.enums.OriginalType;
 import com.bs.modules.spider.mapper.ArticleImgMapper;
 import com.bs.modules.spider.mapper.ArticleMapper;
+import com.bs.modules.spider.mapper.lucene.ILuceneArticleDao;
 import com.bs.modules.spider.pojo.dto.ArticleUrlInfo;
 import com.bs.modules.spider.pojo.vo.ArticleVO;
 import com.bs.modules.spider.service.IAnalysisArticleService;
@@ -44,6 +45,9 @@ public class ArticleServiceImpl implements IArticleService {
     private ArticleMapper articleMapper;
 
     @Autowired
+    private ILuceneArticleDao luceneArticleDao;
+
+    @Autowired
     private ArticleImgMapper articleImgMapper;
 
     @Autowired
@@ -79,8 +83,8 @@ public class ArticleServiceImpl implements IArticleService {
      * @return 文章 分页集合
      */
     @Override
-    public PageInfo<ArticleVO> selectArticlePage(Article article, PageDomain pageDomain) {
-        PageHelper.startPage(pageDomain.getPage(), pageDomain.getLimit());
+    public PageInfo<ArticleVO> selectArticlePage(Article article, PageDomain pageDomain) throws Exception {
+/*        PageHelper.startPage(pageDomain.getPage(), pageDomain.getLimit());
 
         List<Article> select = articleMapper.selectArticleList(article);
         PageInfo<Article> pageInfo = new PageInfo<>(select);
@@ -92,6 +96,15 @@ public class ArticleServiceImpl implements IArticleService {
             return vo;
         }).collect(Collectors.toList());
 
+        PageInfo<ArticleVO> voPageInfo = new PageInfo<>(articleVOS);
+        voPageInfo.setTotal(pageInfo.getTotal());*/
+        PageInfo<Article> pageInfo = luceneArticleDao.searchProduct(article, pageDomain);
+        List<ArticleVO> articleVOS = pageInfo.getList().stream().map(s -> {
+            ArticleVO vo = new ArticleVO();
+            BeanUtils.copyProperties(s, vo);
+            vo.setOriginalType(OriginalType.ofId(s.getOriginalType()).getName());
+            return vo;
+        }).collect(Collectors.toList());
         PageInfo<ArticleVO> voPageInfo = new PageInfo<>(articleVOS);
         voPageInfo.setTotal(pageInfo.getTotal());
         return voPageInfo;

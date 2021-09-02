@@ -70,8 +70,12 @@ public class ArticleController extends BaseController {
     @GetMapping("/data")
     @PreAuthorize("hasPermission('/spider/article/data','spider:article:data')")
     public ResultTable list(@ModelAttribute Article article, PageDomain pageDomain) {
-        PageInfo<ArticleVO> pageInfo = articleService.selectArticlePage(article, pageDomain);
-        return pageTable(pageInfo.getList(), pageInfo.getTotal());
+        try {
+            PageInfo<ArticleVO> pageInfo = articleService.selectArticlePage(article, pageDomain);
+            return pageTable(pageInfo.getList(), pageInfo.getTotal());
+        } catch (Exception e) {
+            return ResultTable.dataTable(Result.failure());
+        }
     }
 
     /**

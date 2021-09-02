@@ -38,7 +38,7 @@ public interface IArticleService {
      * @param pageDomain
      * @return 文章 分页集合
      * */
-    PageInfo<ArticleVO> selectArticlePage(Article article, PageDomain pageDomain);
+    PageInfo<ArticleVO> selectArticlePage(Article article, PageDomain pageDomain) throws Exception;
 
     /**
      * 修改文章

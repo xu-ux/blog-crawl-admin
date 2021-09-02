@@ -94,6 +94,9 @@
         <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
         <aliyun.sdk.oss>3.12.0</aliyun.sdk.oss>
 
+        <!-- 搜索引擎 -->
+        <lucene.version>7.6.0</lucene.version>
+
         <!-- Maven 配 置 编 译 JDK 版 本-->
         <maven.compiler.target>8</maven.compiler.target>
         <maven.compiler.source>8</maven.compiler.source>
@@ -398,6 +401,37 @@
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>${aliyun.sdk.oss}</version>
+        </dependency>
+
+        <!--核心包-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!--对分词索引查询解析-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!--一般分词器，适用于英文分词-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!--检索关键字高亮显示 -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!-- smartcn中文分词器 -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-smartcn</artifactId>
+            <version>${lucene.version}</version>
         </dependency>
 
 

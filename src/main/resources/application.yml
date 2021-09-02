@@ -90,6 +90,7 @@ blogsearch:
   local:
     md-file-path: articleFile/
     tag-file-path: articleFile/tagFile/
+    lucenePath: lucene/indexDir/
     basedir: tomcat/
     driverWin: driver/chromedriver91.0.4472.19.exe
     driverLinux: driver/chromedriver91.0.4472.19

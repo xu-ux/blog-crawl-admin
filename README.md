@@ -13,35 +13,40 @@
 ## 1️⃣技术框架
 
 ```
-SpringBoot
+SpringBoot：springboot全家桶
 
-SpringSecurity
+SpringSecurity：安全组件
 
-Thymeleaf
+Thymeleaf：模板引擎
 
-TkMybatis
+TkMybatis：orm层
 
-Druid
+Druid：数据源连接池和监控
 
-Sharding-Jdbc
+Sharding-Jdbc：分库分表
 
-MySQL
+MySQL：数据存储
 
-Redis
+Redis：分布式存储
 
-Quartz
+Quartz：定时任务框架
 
-Jsoup
+Lucene：搜索引擎
 
-Websocket
+Jsoup：解析Document
 
-Selenium
+Websocket：集成web-socket
 
-LayUI
+Selenium：自动化测试工具
+
+LayUI：前端框架
+
 
 ```
 
 **模块`spider`目录**
+
+[在WebIDE中打开项目](https://github1s.com/xu-ux/blog-crawl-admin)
 
 ```shell
 .
@@ -106,6 +111,12 @@ LayUI
 效果展示：
 
 ![image-20210812174435908](images.assets/image-20210812174435908.png)
+
+
+
+通过lucene搜索引擎搜索：
+
+![image-20210902112810915](images.assets/image-20210902112810915.png)
 
 
 

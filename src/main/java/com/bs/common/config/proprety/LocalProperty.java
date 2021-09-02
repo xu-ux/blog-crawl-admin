@@ -27,21 +27,37 @@ public class LocalProperty {
 
     private String mdFilePath;
 
-
     private String tagFilePath;
-
 
     private String driverWin;
 
     private String driverLinux;
 
+    private String lucenePath;
 
+
+    /**
+     * md图片文件夹
+     * @return
+     */
     public String getRealPath(){
         File path = new File(ClassUtils.getDefaultClassLoader().getResource("").getPath()) ;
         return path.getParentFile().getParent() + File.separator + this.basedir.concat(this.mdFilePath);
     }
 
+    /**
+     * 索引文件夹
+     * @return
+     */
+    public String getLucenePath(){
+        File path = new File(ClassUtils.getDefaultClassLoader().getResource("").getPath()) ;
+        return path.getParentFile().getParent() + File.separator + this.basedir.concat(this.lucenePath);
+    }
 
+    /**
+     * html文件保存的文件夹
+     * @return
+     */
     public String getRealTagFilePath(){
         File path = new File(ClassUtils.getDefaultClassLoader().getResource("").getPath()) ;
         return path.getParentFile().getParent() + File.separator + this.basedir.concat(this.tagFilePath);

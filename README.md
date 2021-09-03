@@ -100,7 +100,7 @@ LayUI：前端框架
 
 文章实际效果：
 
-![show20210812213510](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-show20210812213510.gif)
+![show20210812213510](images.assets/image-show20210812213510.gif)
 
 
 

@@ -88,15 +88,15 @@ LayUI：前端框架
 
 爬虫内容管理界面：
 
-![image-20210812164506507](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210812164506507.png)
+![image-20210812164506507](images.assets/image-20210812164506507.png)
 
 提交爬取的文章地址：
 
-![image-20210812164555974](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210812164555974.png)
+![image-20210812164555974](images.assets/image-20210812164555974.png)
 
 得到文章：
 
-![image-20210812164930515](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210812164930515.png)
+![image-20210812164930515](images.assets/image-20210812164930515.png)
 
 文章实际效果：
 
@@ -106,17 +106,17 @@ LayUI：前端框架
 
 根据CSDN收藏夹地址新增多篇文章
 
-![image-20210812174128708](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210812174128708.png)
+![image-20210812174128708](images.assets/image-20210812174128708.png)
 
 效果展示：
 
-![image-20210812174435908](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210812174435908.png)
+![image-20210812174435908](images.assets/image-20210812174435908.png)
 
 
 
 通过lucene搜索引擎搜索：
 
-![image-20210902112810915](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210902112810915.png)
+![image-20210902112810915](images.assets/image-20210902112810915.png)
 
 
 
@@ -124,7 +124,7 @@ LayUI：前端框架
 
 实时日志：
 
-![image-20210812172114256](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210812172114256.png)
+![image-20210812172114256](images.assets/image-20210812172114256.png)
 
 
 
@@ -149,9 +149,9 @@ LayUI：前端框架
 
 **1.修改编译环境为jdk1.8**
 
-![image-20210813134225000](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210813134225000.png)
+![image-20210813134225000](images.assets/image-20210813134225000.png)
 
-![image-20210813134209041](https://cdn.jsdelivr.net/gh/xu-ux/blog-crawl-admin/images.assets/image-20210813134209041.png)
+![image-20210813134209041](images.assets/image-20210813134209041.png)
 
 
 

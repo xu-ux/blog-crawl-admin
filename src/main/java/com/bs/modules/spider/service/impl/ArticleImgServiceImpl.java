@@ -221,7 +221,7 @@ public class ArticleImgServiceImpl implements IArticleImgService {
                         // 上传oss
                         String ossUrl = "";
                         if (ReadYmlUtils.getConfig().getAppSwitch().isUploadOss()){
-                           OssUtils.uploadInsToOss(OssConst.getPublicBucketName(), dir, fileNewName, in, null);
+                            ossUrl = OssUtils.uploadInsToOss(OssConst.getPublicBucketName(), dir, fileNewName, in, null);
                         }
 
                         // 上传本地

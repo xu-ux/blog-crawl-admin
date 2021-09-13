@@ -39,6 +39,7 @@ public enum OriginalType {
     Stackoverflow(12,"栈溢出论坛"),
     InfoQ(13,"infoQ中文站博客"),
     TencentCloud(14,"腾讯云社区"),
+    ZhiDeMai(15,"值得买社区"),
     ;
     /**
      * typeId

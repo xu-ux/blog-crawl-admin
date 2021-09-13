@@ -35,8 +35,9 @@ public enum SourceType {
     KanXue(11,"kanxue","https://bbs.pediy.com/","pediy.com","^(http|https)://([\\w.\\/]+thread-)(\\w+)(\\.html|\\.htm)$",3,"看雪安全论坛"),
     Stackoverflow(12,"stackoverflow","https://stackoverflow.com/","stackoverflow.com","",3,"栈溢出论坛"),
     InfoQ(13,"infoQ","https://xie.infoq.cn/","xie.infoq.cn","^(http|https)://([\\w.\\/]+article\\/)(\\w+)",3,"infoQ中文站博客",InfoQAnalysisArticle.class),
-    TencentCloud(14,"TencentCloud","https://cloud.tencent.com/","cloud.tencent.com","^(http|https)://([\\w.\\/]+article\\/)(\\w+)",3,"腾讯云社区")
+    TencentCloud(14,"TencentCloud","https://cloud.tencent.com/","cloud.tencent.com","^(http|https)://([\\w.\\/]+article\\/)(\\w+)",3,"腾讯云社区"),
     //Other(14,"other","","other","",3,"其他文章"),
+    ZhiDeMai(15,"ZhiDeMai","https://post.smzdm.com/","post.smzdm.com","^(http|https)://([\\w.\\/]+p\\/)(\\w+)",3,"值得买社区",SmzdmAnalysisArticle.class),
     ;
     /**
      * typeId

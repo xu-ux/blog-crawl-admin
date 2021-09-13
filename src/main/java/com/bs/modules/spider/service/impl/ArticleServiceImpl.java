@@ -84,7 +84,7 @@ public class ArticleServiceImpl implements IArticleService {
      */
     @Override
     public PageInfo<ArticleVO> selectArticlePage(Article article, PageDomain pageDomain) throws Exception {
-/*        PageHelper.startPage(pageDomain.getPage(), pageDomain.getLimit());
+        PageHelper.startPage(pageDomain.getPage(), pageDomain.getLimit());
 
         List<Article> select = articleMapper.selectArticleList(article);
         PageInfo<Article> pageInfo = new PageInfo<>(select);
@@ -97,8 +97,9 @@ public class ArticleServiceImpl implements IArticleService {
         }).collect(Collectors.toList());
 
         PageInfo<ArticleVO> voPageInfo = new PageInfo<>(articleVOS);
-        voPageInfo.setTotal(pageInfo.getTotal());*/
-        PageInfo<Article> pageInfo = luceneArticleDao.searchProduct(article, pageDomain);
+        voPageInfo.setTotal(pageInfo.getTotal());
+        // 搜索引擎逻辑
+       /* PageInfo<Article> pageInfo = luceneArticleDao.searchProduct(article, pageDomain);
         List<ArticleVO> articleVOS = pageInfo.getList().stream().map(s -> {
             ArticleVO vo = new ArticleVO();
             BeanUtils.copyProperties(s, vo);
@@ -106,7 +107,7 @@ public class ArticleServiceImpl implements IArticleService {
             return vo;
         }).collect(Collectors.toList());
         PageInfo<ArticleVO> voPageInfo = new PageInfo<>(articleVOS);
-        voPageInfo.setTotal(pageInfo.getTotal());
+        voPageInfo.setTotal(pageInfo.getTotal());*/
         return voPageInfo;
     }
 

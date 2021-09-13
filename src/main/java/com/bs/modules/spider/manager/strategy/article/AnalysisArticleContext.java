@@ -57,6 +57,28 @@ public class AnalysisArticleContext {
     private InfoQAnalysisArticle infoQAnalysisArticle;
 
     @Autowired
+    private SmzdmAnalysisArticle smzdmAnalysisArticle;
+
+    /**
+     * 启动时，配置策略对象
+     */
+    @PostConstruct
+    public synchronized void addStrategy() {
+        list.add(csdnAnalysisArticle);
+        list.add(jianShuAnalysisArticle);
+        list.add(seleniumAnalysisArticle);
+        list.add(cnBlogsAnalysisArticle);
+        list.add(weiXinAnalysisArticle);
+        list.add(csdnAnalysisArticle);
+        list.add(ctoAnalysisArticle);
+        list.add(sfAnalysisArticle);
+        list.add(jueJinAnalysisArticle);
+        list.add(osChinaAnalysisArticle);
+        list.add(infoQAnalysisArticle);
+        list.add(smzdmAnalysisArticle);
+    }
+
+    @Autowired
     private LocalProperty localProperty;
 
     private static volatile List<AnalysisArticleStrategy> list = new ArrayList<>();
@@ -87,27 +109,6 @@ public class AnalysisArticleContext {
     public AnalysisArticleStrategy findService(SourceType sourceType){
         final String name = sourceType.getClazz().getName();
         return list.stream().filter(s -> s.getClass().getName().equals(name)).findFirst().orElse(null);
-    }
-
-
-
-
-    /**
-     * 启动时，配置策略对象
-     */
-    @PostConstruct
-    public synchronized void addStrategy() {
-        list.add(csdnAnalysisArticle);
-        list.add(jianShuAnalysisArticle);
-        list.add(seleniumAnalysisArticle);
-        list.add(cnBlogsAnalysisArticle);
-        list.add(weiXinAnalysisArticle);
-        list.add(csdnAnalysisArticle);
-        list.add(ctoAnalysisArticle);
-        list.add(sfAnalysisArticle);
-        list.add(jueJinAnalysisArticle);
-        list.add(osChinaAnalysisArticle);
-        list.add(infoQAnalysisArticle);
     }
 
 
